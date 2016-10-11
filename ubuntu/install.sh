@@ -58,11 +58,12 @@ function install_tigervnc
     read -p "Do you wanna add tigervncuser to sudoers group ? [y/N] " yn
     case $yn in
         Y|y ) sudo usermod -aG sudo tigervncuser;;
-        * ) echo "Yes master!";;
+        * ) echo "Yes master!"
     esac
 
-    su - tigervncuser;
-    tigervncpasswd;
+    echo "Switching to vncserver user in order to add vncserver password!"
+    runuser -l tigervncuser -c tigervncpasswd
+    # sudo -H -u tigervncuser bash -c tigervncpasswd
 
     # run vncserver once to create config files and kill
     tigervncserver
