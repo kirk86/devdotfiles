@@ -62,11 +62,13 @@ function install_tigervnc
     esac
 
     echo "Switching to vncserver user in order to add vncserver password!"
-    runuser -l tigervncuser -c tigervncpasswd
+    sudo runuser -l tigervncuser -c tigervncpasswd
     # sudo -H -u tigervncuser bash -c tigervncpasswd
 
     # run vncserver once to create config files and kill
+    echo "Running tigervncserver in order to create config files."
     tigervncserver
+    echo "Killing tigervncserver."
     tigervncserver -kill :1
 
     cp ${HOME}/.vnc/xstartup ${HOME}/.vnc/xstartup-old
