@@ -51,7 +51,8 @@ function install_tigervnc
     cd ..
 
     # create vncuser
-    sudo adduser tigervncuser
+    echo "Adding user for tigervncserver with username tigervcnuser";
+    sudo adduser tigervncuser;
     # passwd tigervncuser
 
     read "Do you wanna add tigervncuser to sudoers group ? [y/N]" yn
@@ -61,8 +62,8 @@ function install_tigervnc
             exit 0
     esac
 
-    su - tigervncuser
-    tigervncpasswd
+    su - tigervncuser;
+    tigervncpasswd;
 
     # run vncserver once to create config files and kill
     tigervncserver
