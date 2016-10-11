@@ -34,7 +34,9 @@ function install_tigervnc
     cd tigervnc
     git checkout 044e2b87da7121ef6cbd59e88b101d7d8e282896 \
         -b 044e2b87da7121ef6cbd59e88b101d7d8e282896
-    ln -s contrib/packages/deb/ubuntu-$(lsb_release -a | grep -i codename | cut -f2)/debian
+    # ln -s contrib/packages/deb/ubuntu-$(lsb_release -a | grep -i codename | cut -f2)/debian
+    # just to be sure if lsb_release can not be installed
+    ln -s contrib/packages/deb/ubuntu-$(cat /etc/lsb-release | grep -i codename | cut -d= -f2)/debian
     # intall pkgs in order to build tigervnc
     sudo apt install -y $(grep Build-Depends: debian/control | \
                                  sed -e 's/Build-Depends://g' -e 's/([^\)]*)//g' -e 's/,//g')
@@ -66,7 +68,7 @@ function install_tigervnc
     tigervncserver
     tigervncserver -kill :1
 
-    cp ${HOME}/.vnc/xstartup ${HOME}/.vnc/xstartup-backup
+    cp ${HOME}/.vnc/xstartup ${HOME}/.vnc/xstartup-old
 
    cat <<EOF > ${HOME}/.vnc/xstartup
 #!/bin/sh
@@ -91,6 +93,9 @@ EOF
 
    # finally enable tigervnc
    tigervncserver
+
+   # cleanup
+   rm -rf ${HOME}/tigervnc
 }
 
 function install_openblas
