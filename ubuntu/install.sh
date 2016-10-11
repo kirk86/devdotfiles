@@ -55,7 +55,7 @@ function install_tigervnc
     sudo adduser tigervncuser;
     # passwd tigervncuser
 
-    read "Do you wanna add tigervncuser to sudoers group ? [y/N]" yn
+    read -p "Do you wanna add tigervncuser to sudoers group ? [y/N]" yn
     case $yn in
         Y|y ) sudo usermod -aG sudo tigervncuser;;
         * ) echo "Yes master!"
