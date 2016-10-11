@@ -1,4 +1,4 @@
-# Quick ubuntu dev server setup
+# Quick ubuntu dev environment setup
 *Notice*: Unfortunately requires root privilege access. I'm afraid no easy way around that!
 
 1. installs prerequisite packages
