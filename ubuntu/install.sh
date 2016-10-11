@@ -131,44 +131,40 @@ function install_anaconda
     # download and install conda
     cd ${HOME}
 
-    read "Do you wanna install miniconda or anaconda ? [y/N]" yn
+    read -p "Do you wanna install miniconda or anaconda ? [y/N] " yn
     case $yn in
         Y|y ) wget https://repo.continuum.io/miniconda/Miniconda2-4.1.11-Linux-x86_64.sh;
               bash Miniconda2-4.1.11-Linux-x86_64.sh;;
         * ) wget https://repo.continuum.io/archive/Anaconda2-4.2.0-Linux-x86_64.sh;
             bash Anaconda2-4.2.0-Linux-x86_64.sh
-            exit 0
     esac
 
     # Add anaconda to your $PATH
-    export PATH=$HOME/anaconda/bin:$PATH;
+    echo "Adding anaconda to your path!"
+    export PATH=$HOME/anaconda/bin:$PATH
 
-    read "Do you wanna install Theano ?" yn
+    read -p "Do you wanna install Theano ? " yn
     case $yn in
         Y|y ) conda install Theano;;
         * ) echo "Yes master!"
-            exit 0
     esac
 
-    read "would you like to run tests for Theano now ? [y/n]" yn
+    read -p "Would you like to run the tests for Theano now ? [y/n] " yn
     case $yn in
         y|y ) python -c "import theano; theano.test()";;
         * ) echo "yes master!"
-            exit 0
     esac
 
-    read "Do you wanna install Torch7 separetely or as part of anaconda ?" yn
+    read -p "Do you wanna install Torch7 separetely or as part of anaconda ? " yn
     case $yn in
         Y|y ) git clone https://github.com/torch/distro.git ~/torch --recursive;
               cd ~/torch; bash install-deps; ./install.sh;;
         * ) conda install lua=5.2 lua-science -c alexbw
-            exit 0
     esac
 
-    read "would you like to run tests for Torch7 now ? [y/n]" yn
+    read -p "would you like to run the tests for Torch7 now ? [y/n] " yn
     case $yn in
         y|y ) cd ${HOME}/torch; bash ./test.sh;;
         * ) echo "yes master!"
-            exit 0
     esac
 }
