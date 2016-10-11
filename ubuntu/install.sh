@@ -132,6 +132,9 @@ function install_anaconda
             exit 0
     esac
 
+    # Add anaconda to your $PATH
+    export PATH=$HOME/anaconda/bin:$PATH;
+
     read "Do you wanna install Theano ?" yn
     case $yn in
         Y|y ) conda install Theano;;
