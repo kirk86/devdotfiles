@@ -26,8 +26,9 @@ function install_prerequisites
 function install_tigervnc
 {
     # install minimal gui for vnc/rdp access
-    sudo apt-get install xorg lxde-core lxtask lxrandr lxterminal git \
-         devscripts lsb-core lsb_release
+    echo "Installing minimal gui."
+    sudo apt-get install -y xorg lxde-core lxtask lxrandr lxterminal git \
+         devscripts lxde-common xinit lsb-core lsb_release
 
     mkdir -p ${HOME}/tigervnc && cd ${HOME}/tigervnc
     git clone https://github.com/TigerVNC/tigervnc
@@ -124,6 +125,9 @@ function install_openblas
         echo "Error. OpenBLAS could not be installed";
         exit $RET;
     fi
+
+    echo "Cleaning up!"
+    rm -rf /tmp/OpenBLAS
 }
 
 function install_anaconda
@@ -140,10 +144,10 @@ function install_anaconda
     esac
 
     # Add anaconda to your $PATH
-    echo "Adding anaconda to your path!"
-    export PATH=$HOME/anaconda/bin:$PATH
+    # echo "Adding anaconda to your path!"
+    # echo export PATH=$HOME/anaconda/bin:$PATH >> ${HOME}/.bashrc
 
-    read -p "Do you wanna install Theano ? " yn
+    read -p "Do you wanna install Theano ? [y/N]" yn
     case $yn in
         Y|y ) conda install Theano;;
         * ) echo "Yes master!"
@@ -155,7 +159,7 @@ function install_anaconda
         * ) echo "yes master!"
     esac
 
-    read -p "Do you wanna install Torch7 separetely or as part of anaconda ? " yn
+    read -p "Do you wanna install Torch7 separetely or as part of anaconda ? [y/N]" yn
     case $yn in
         Y|y ) git clone https://github.com/torch/distro.git ~/torch --recursive;
               cd ~/torch; bash install-deps; ./install.sh;;
