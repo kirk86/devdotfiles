@@ -29,15 +29,18 @@ function install_prerequisites
     sudo apt-get install -f; sudo apt-get autoremove; sudo apt-get autoclean
 }
 
-# install vncserver/viewer
-function install_tigervnc
+function install_lxde
 {
     # install minimal gui for vnc/rdp access
     print_message "Installing minimal gui."
     sudo apt-get install -y doxygen xsltproc xorg lightdm lxde-core \
          lxtask lxrandr lxterminal devscripts lxde-common xinit \
-         lsb-core lsb_release git; sudo apt-get install -f
+         lsb-core git; sudo apt-get install -f
+}
 
+# install vncserver/viewer
+function install_tigervnc
+{
     mkdir -p ${HOME}/tigervnc && cd ${HOME}/tigervnc
     git clone https://github.com/TigerVNC/tigervnc
     cd tigervnc
@@ -60,7 +63,10 @@ function install_tigervnc
     cd ..
     sudo dpkg -i *.deb || (sudo apt -f install -y; sudo dpkg -i *.deb)
     cd ..
+}
 
+function config_tigervnc
+{
     # create vncuser
     print_message "Adding user for tigervncserver with username tigervcnuser"
     sudo adduser tigervncuser
@@ -137,7 +143,7 @@ function install_openblas
         print_message "Error. OpenBLAS could not be installed"
         exit $RET;
     fi
-}
+}e
 
 function install_anaconda
 {
@@ -154,7 +160,7 @@ function install_anaconda
                   Y|y ) pip install Theano;;
                   * ) print_message "Yes master!"
               esac;;
-        * ) wget https://repo.continuum.io/archives/Anaconda2-4.2.0-Linux-x86_64.sh
+        * ) wget https://repo.continuum.io/archive/Anaconda2-4.2.0-Linux-x86_64.sh
             bash Anaconda2-4.2.0-Linux-x86_64.sh
             source ${HOME}/.bashrc
             read -p "Do you wanna install Theano ? [y/N] " yn
@@ -211,6 +217,7 @@ function cleanup
 
 install_prerequisites 2>logs.txt
 # install_tigervnc 2>logs.txt
+# config_tigervnc 2>logs.txt
 # install_openblas 2>logs.txt
 # install_anaconda 2>logs.txt
 # cleanup 2>logs.txt

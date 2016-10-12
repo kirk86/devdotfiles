@@ -12,7 +12,7 @@
 2. port it for OS X
 
 *Tested:*
-- Not tested yet.
+- Not tested yet. Might contain errors.
 
 *Notice:*
 
