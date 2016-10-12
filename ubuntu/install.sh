@@ -11,17 +11,19 @@ function install_prerequisites
     sudo aptg-get update && sudo apt-get upgrade && sudo apt-get dist-ugrade
 
     # install prerequisites
-    sudo apt-get install -y -f software-properties-common \
+    sudo apt-get install -y software-properties-common \
          libgraphicsmagick1-dev libfftw3-dev sox libsox-dev \
          libsox-fmt-all
 
     # install prerequisites - build-essential
-    sudo apt-get install -y -f build-dep build-essential gcc g++ curl \
+    sudo apt-get install -y build-dep build-essential gcc g++ curl \
          wget cmake libreadline-dev git-core libqt4-dev libjpeg-dev \
          libpng-dev ncurses-dev imagemagick libzmq3-dev gfortran \
          unzip gnuplot gnuplot-x11
     # libopenblas-dev
 
+    # install missing dependencies
+    sudo apt-get install -f
     # remove unecessary packages
     sudo apt-get autoremove && sudo apt-get autoclean
 }
@@ -32,9 +34,10 @@ function install_tigervnc
 {
     # install minimal gui for vnc/rdp access
     print_message "Installing minimal gui."
-    sudo apt-get install -y -f doxygen xsltproc xorg lxde-core lxtask \
-         lxrandr lxterminal devscripts lxde-common xinit lsb-core \
-         lsb_release git
+    sudo apt-get install -y doxygen xsltproc xorg lightdm lxde-core \
+         lxtask lxrandr lxterminal devscripts lxde-common xinit \
+         lsb-core lsb_release git
+    sudo apt-get install -f
 
     mkdir -p ${HOME}/tigervnc && cd ${HOME}/tigervnc
     git clone https://github.com/TigerVNC/tigervnc
@@ -47,6 +50,8 @@ function install_tigervnc
     # intall pkgs in order to build tigervnc
     sudo apt install -y $(grep Build-Depends: debian/control | \
                                  sed -e 's/Build-Depends://g' -e 's/([^\)]*)//g' -e 's/,//g')
+    sudo apt-get install -f
+
     # build tigervnc
     chmod a+x debian/rules
     fakeroot debian/rules binary
@@ -97,9 +102,10 @@ startlxde &
 EOF
 
    # install and run xrdp server
-   sudo apt install -y -f xrdp
+   sudo apt-get install -y xrdp
    sudo systemctl enable xrdp
    sudo systemctl restart xrdp
+   sudo apt-get install -f
 
    # finally enable tigervnc
    print_message "Enabling tigervncserver."
