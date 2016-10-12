@@ -1,3 +1,6 @@
+#!/usr/bin/env bash
+set -e
+
 function print_message
 {
     echo ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;"
@@ -27,7 +30,6 @@ function install_prerequisites
     # remove unecessary packages
     sudo apt-get autoremove && sudo apt-get autoclean
 }
-
 
 # install vncserver/viewer
 function install_tigervnc
@@ -203,7 +205,12 @@ function install_anaconda
 function cleanup
 {
     print_message "Cleaning up!"
-    rm -rf /tmp/OpenBLAS;
+    rm -rf /tmp/OpenBLAS
+    sudo apt-get update && sudo apt-get upgrade
+    sudo apt-get dist-upgrade
+    sudo apt-get install -f
+    sudo apt-get autoclean
+    sudo apt-get autoremove
 }
 
 install_prerequisites 2>logs.txt
