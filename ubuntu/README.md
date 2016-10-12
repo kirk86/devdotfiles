@@ -9,4 +9,5 @@
 
 *Todo:*
 
-1. add support for mlk intel
+1. port it for arch linux
+2. port it for OS X
