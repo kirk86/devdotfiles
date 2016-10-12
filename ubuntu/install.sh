@@ -1,3 +1,10 @@
+function print_message
+{
+    echo ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;"
+    echo ";;               $1                        ;;"
+    echo ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;"
+}
+
 function install_prerequisites
 {
     # update packages
@@ -5,20 +12,21 @@ function install_prerequisites
     sudo apt-get upgrade;
     sudo apt-get dist-ugrade;
 
-    # remove unecessary packages
-    sudo apt-get autoremove;
-
     # install prerequisites
     sudo apt-get install -y software-properties-common \
          libgraphicsmagick1-dev libfftw3-dev sox libsox-dev \
          libsox-fmt-all
 
     # install prerequisites - build-essential
-    sudo apt-get install -y build-essential gcc g++ curl wget \
-         cmake libreadline-dev git-core libqt4-dev libjpeg-dev \
+    sudo apt-get install -y -f build-dep build-essential gcc g++ curl \
+         wget cmake libreadline-dev git-core libqt4-dev libjpeg-dev \
          libpng-dev ncurses-dev imagemagick libzmq3-dev gfortran \
          unzip gnuplot gnuplot-x11
     # libopenblas-dev
+
+    # remove unecessary packages
+    sudo apt-get autoremove;
+    sudo apt-get autoclean;
 }
 
 
@@ -26,13 +34,14 @@ function install_prerequisites
 function install_tigervnc
 {
     # install minimal gui for vnc/rdp access
-    echo "Installing minimal gui.";
-    sudo apt-get install -y xorg lxde-core lxtask lxrandr lxterminal \
-         devscripts lxde-common xinit lsb-core lsb_release git
+    print_message "Installing minimal gui."
+    sudo apt-get install -y -f doxygen xsltproc xorg lxde-core lxtask \
+         lxrandr lxterminal devscripts lxde-common xinit lsb-core \
+         lsb_release git
 
-    mkdir -p ${HOME}/tigervnc && cd ${HOME}/tigervnc;
-    git clone https://github.com/TigerVNC/tigervnc;
-    cd tigervnc;
+    mkdir -p ${HOME}/tigervnc && cd ${HOME}/tigervnc
+    git clone https://github.com/TigerVNC/tigervnc
+    cd tigervnc
     git checkout 044e2b87da7121ef6cbd59e88b101d7d8e282896 \
         -b 044e2b87da7121ef6cbd59e88b101d7d8e282896
     # ln -s contrib/packages/deb/ubuntu-$(lsb_release -a | grep -i codename | cut -f2)/debian
@@ -42,34 +51,34 @@ function install_tigervnc
     sudo apt install -y $(grep Build-Depends: debian/control | \
                                  sed -e 's/Build-Depends://g' -e 's/([^\)]*)//g' -e 's/,//g')
     # build tigervnc
-    chmod a+x debian/rules;
-    fakeroot debian/rules binary;
+    chmod a+x debian/rules
+    fakeroot debian/rules binary
 
     # Install deb files while installing depend package with running
     # "apt -f install".
-    cd ..;
-    sudo dpkg -i *.deb || (sudo apt -f install -y; sudo dpkg -i *.deb);
-    cd ..;
+    cd ..
+    sudo dpkg -i *.deb || (sudo apt -f install -y; sudo dpkg -i *.deb)
+    cd ..
 
     # create vncuser
-    echo "Adding user for tigervncserver with username tigervcnuser";
+    echo "Adding user for tigervncserver with username tigervcnuser"
     sudo adduser tigervncuser;
     # passwd tigervncuser
 
-    read -p "Do you wanna add tigervncuser to sudoers group ? [y/N] " yn;
+    read -p "Do you wanna add tigervncuser to sudoers group ? [y/N] " yn
     case $yn in
         Y|y ) sudo usermod -aG sudo tigervncuser;;
-        * ) echo "Yes master!";
+        * ) echo "Yes master!"
     esac
 
-    echo "Switching to vncserver user in order to add vncserver password!";
+    echo "Switching to vncserver user in order to add vncserver password!"
     sudo runuser -l tigervncuser -c tigervncpasswd;
     # sudo -H -u tigervncuser bash -c tigervncpasswd
 
     # run vncserver once to create config files and kill
-    echo "Running tigervncserver in order to create config files.";
+    echo "Running tigervncserver in order to create config files."
     tigervncserver;
-    echo "Killing tigervncserver.";
+    echo "Killing tigervncserver."
     tigervncserver -kill :1;
 
     cp ${HOME}/.vnc/xstartup ${HOME}/.vnc/xstartup-old;
@@ -99,7 +108,7 @@ EOF
    tigervncserver;
 
    # cleanup
-   rm -rf ${HOME}/tigervnc;
+   rm -rf ${HOME}/tigervnc
 }
 
 function install_openblas
@@ -133,25 +142,25 @@ function install_openblas
 function install_anaconda
 {
     # download and install conda
-    cd ${HOME};
+    cd ${HOME}
 
-    read -p "Do you wanna install miniconda or anaconda ? [y/N] " yn;
+    read -p "Do you wanna install miniconda or anaconda ? [y/N] " yn
     case $yn in
-        Y|y ) wget https://repo.continuum.io/miniconda/Miniconda2-4.1.11-Linux-x86_64.sh;
+        Y|y ) wget https://repo.continuum.io/miniconda/Miniconda2-4.1.11-Linux-x86_64.sh
               bash Miniconda2-4.1.11-Linux-x86_64.sh;
               source ${HOME}/.bashrc;
-              read -p "Do you wanna install Theano ? [y/N] " yn;
+              read -p "Do you wanna install Theano ? [y/N] " yn
               case $yn in
                   Y|y ) pip install Theano;;
-                  * ) echo "Yes master!";
+                  * ) echo "Yes master!"
               esac;;
-        * ) wget https://repo.continuum.io/archive/Anaconda2-4.2.0-Linux-x86_64.sh;
+        * ) wget https://repo.continuum.io/archive/Anaconda2-4.2.0-Linux-x86_64.sh
             bash Anaconda2-4.2.0-Linux-x86_64.sh;
             source ${HOME}/.bashrc;
-            read -p "Do you wanna install Theano ? [y/N] " yn;
+            read -p "Do you wanna install Theano ? [y/N] " yn
             case $yn in
                 Y|y ) conda install Theano;;
-                * ) echo "Yes master!";
+                * ) echo "Yes master!"
             esac
     esac
 
@@ -160,7 +169,7 @@ function install_anaconda
     # echo export PATH=$HOME/anaconda/bin:$PATH >> ${HOME}/.bashrc
 
 
-    read -p "Would you like to run the tests for Theano now ? [y/n] " yn;
+    read -p "Would you like to run the tests for Theano now ? [y/n] " yn
     case $yn in
         y|y ) conda install nose;
               pip install nose-parameterized;
@@ -168,19 +177,19 @@ function install_anaconda
               conda install graphviz;
               conda install pydot;
               python -c "import theano; theano.test()";;
-        * ) echo "yes master!";
+        * ) echo "yes master!"
     esac
 
-    read -p "Do you wanna install Torch7 separetely or as part of anaconda ? [y/N] " yn;
+    read -p "Do you wanna install Torch7 separetely or as part of anaconda ? [y/N] " yn
     case $yn in
         Y|y ) git clone https://github.com/torch/distro.git ~/torch --recursive;
               cd ~/torch; bash install-deps; ./install.sh;
-              read -p "would you like to run the tests for Torch7 now ? [y/n] " yn;
+              read -p "would you like to run the tests for Torch7 now ? [y/n] " yn
               case $yn in
                   Y|y ) cd ${HOME}/torch; bash ./test.sh;;
-                  * ) echo "yes master!";
+                  * ) echo "yes master!"
               esac;;
-        * ) conda install lua=5.2 lua-science -c alexbw;
+        * ) conda install lua=5.2 lua-science -c alexbw
     esac
 }
 
