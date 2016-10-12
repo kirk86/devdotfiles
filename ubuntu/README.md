@@ -9,8 +9,7 @@
 
 *Todo:*
 
-1. port it for arch linux (not tested yet)
-2. port it for OS X
+1. port it for OS X
 
 *Tested:*
 - Tested on Ubuntu 16.04 codename xenial.
@@ -24,6 +23,5 @@
   tunneling in our client machine.
 
   ```shell
-  ssh -L 5901:127.0.0.1:5901 -N -f -l vncuser
-  128.199.234.106
+  ssh -L 5901:127.0.0.1:5901 -N -f -l vncuser 128.199.234.106
   ```
