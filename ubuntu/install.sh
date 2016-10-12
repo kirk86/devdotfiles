@@ -11,7 +11,7 @@ function print_message
 function install_prerequisites
 {
     # update packages
-    sudo aptg-get update && sudo apt-get upgrade && sudo apt-get dist-ugrade
+    sudo aptg-get update; sudo apt-get upgrade; sudo apt-get dist-ugrade
 
     # install prerequisites
     sudo apt-get install -y software-properties-common \
@@ -25,10 +25,8 @@ function install_prerequisites
          unzip gnuplot gnuplot-x11
     # libopenblas-dev
 
-    # install missing dependencies
-    sudo apt-get install -f
-    # remove unecessary packages
-    sudo apt-get autoremove && sudo apt-get autoclean
+    # install missing dependencies and remove unecessary packages
+    sudo apt-get install -f; sudo apt-get autoremove; sudo apt-get autoclean
 }
 
 # install vncserver/viewer
@@ -38,8 +36,7 @@ function install_tigervnc
     print_message "Installing minimal gui."
     sudo apt-get install -y doxygen xsltproc xorg lightdm lxde-core \
          lxtask lxrandr lxterminal devscripts lxde-common xinit \
-         lsb-core lsb_release git
-    sudo apt-get install -f
+         lsb-core lsb_release git; sudo apt-get install -f
 
     mkdir -p ${HOME}/tigervnc && cd ${HOME}/tigervnc
     git clone https://github.com/TigerVNC/tigervnc
@@ -214,7 +211,7 @@ function cleanup
 }
 
 install_prerequisites 2>logs.txt
-install_tigervnc 2>logs.txt
-install_openblas 2>logs.txt
-install_anaconda 2>logs.txt
-cleanup 2>logs.txt
+# install_tigervnc 2>logs.txt
+# install_openblas 2>logs.txt
+# install_anaconda 2>logs.txt
+# cleanup 2>logs.txt
