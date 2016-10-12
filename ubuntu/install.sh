@@ -8,9 +8,7 @@ function print_message
 function install_prerequisites
 {
     # update packages
-    sudo aptg-get update;
-    sudo apt-get upgrade;
-    sudo apt-get dist-ugrade;
+    sudo aptg-get update && sudo apt-get upgrade && sudo apt-get dist-ugrade
 
     # install prerequisites
     sudo apt-get install -y -f software-properties-common \
@@ -25,8 +23,7 @@ function install_prerequisites
     # libopenblas-dev
 
     # remove unecessary packages
-    sudo apt-get autoremove;
-    sudo apt-get autoclean;
+    sudo apt-get autoremove && sudo apt-get autoclean
 }
 
 
@@ -62,7 +59,7 @@ function install_tigervnc
 
     # create vncuser
     print_message "Adding user for tigervncserver with username tigervcnuser"
-    sudo adduser tigervncuser;
+    sudo adduser tigervncuser
     # passwd tigervncuser
 
     read -p "Do you wanna add tigervncuser to sudoers group ? [y/N] " yn
@@ -72,16 +69,16 @@ function install_tigervnc
     esac
 
     print_message "Switching to vncserver user in order to add vncserver password!"
-    sudo runuser -l tigervncuser -c tigervncpasswd;
+    sudo runuser -l tigervncuser -c tigervncpasswd
     # sudo -H -u tigervncuser bash -c tigervncpasswd
 
     # run vncserver once to create config files and kill
     print_message "Running tigervncserver in order to create config files."
-    tigervncserver;
+    tigervncserver
     print_message "Killing tigervncserver."
-    tigervncserver -kill :1;
+    tigervncserver -kill :1
 
-    cp ${HOME}/.vnc/xstartup ${HOME}/.vnc/xstartup-old;
+    cp ${HOME}/.vnc/xstartup ${HOME}/.vnc/xstartup-old
 
    cat <<EOF > ${HOME}/.vnc/xstartup
 #!/bin/sh
@@ -100,12 +97,13 @@ startlxde &
 EOF
 
    # install and run xrdp server
-   sudo apt install -y xrdp;
-   sudo systemctl enable xrdp;
-   sudo systemctl restart xrdp;
+   sudo apt install -y -f xrdp
+   sudo systemctl enable xrdp
+   sudo systemctl restart xrdp
 
    # finally enable tigervnc
-   tigervncserver;
+   print_message "Enabling tigervncserver."
+   tigervncserver
 
    # cleanup
    rm -rf ${HOME}/tigervnc
@@ -114,10 +112,10 @@ EOF
 function install_openblas
 {
     # Get and build OpenBlas (Torch is much better with a decent Blas)
-    cd /tmp/;
-    rm -rf OpenBLAS;
-    git clone https://github.com/xianyi/OpenBLAS.git;
-    cd OpenBLAS;
+    cd /tmp/
+    rm -rf OpenBLAS
+    git clone https://github.com/xianyi/OpenBLAS.git
+    cd OpenBLAS
     if [ $(getconf _NPROCESSORS_ONLN) == 1 ]; then
         make NO_AFFINITY=1 USE_OPENMP=0 USE_THREAD=0
     else
@@ -134,9 +132,6 @@ function install_openblas
         print_message "Error. OpenBLAS could not be installed"
         exit $RET;
     fi
-
-    print_message "Cleaning up!"
-    rm -rf /tmp/OpenBLAS;
 }
 
 function install_anaconda
@@ -147,16 +142,16 @@ function install_anaconda
     read -p "Do you wanna install miniconda or anaconda ? [y/N] " yn
     case $yn in
         Y|y ) wget https://repo.continuum.io/miniconda/Miniconda2-4.1.11-Linux-x86_64.sh
-              bash Miniconda2-4.1.11-Linux-x86_64.sh;
-              source ${HOME}/.bashrc;
+              bash Miniconda2-4.1.11-Linux-x86_64.sh
+              source ${HOME}/.bashrc
               read -p "Do you wanna install Theano ? [y/N] " yn
               case $yn in
                   Y|y ) pip install Theano;;
                   * ) print_message "Yes master!"
               esac;;
         * ) wget https://repo.continuum.io/archive/Anaconda2-4.2.0-Linux-x86_64.sh
-            bash Anaconda2-4.2.0-Linux-x86_64.sh;
-            source ${HOME}/.bashrc;
+            bash Anaconda2-4.2.0-Linux-x86_64.sh
+            source ${HOME}/.bashrc
             read -p "Do you wanna install Theano ? [y/N] " yn
             case $yn in
                 Y|y ) conda install Theano;;
@@ -171,29 +166,42 @@ function install_anaconda
 
     read -p "Would you like to run the tests for Theano now ? [y/n] " yn
     case $yn in
-        y|y ) conda install nose;
-              pip install nose-parameterized;
-              sudo apt-get install graphviz;
-              conda install graphviz;
-              conda install pydot;
+        y|y ) conda install nose
+              pip install nose-parameterized
+              sudo apt-get install -y -f graphviz
+              conda install graphviz
+              conda install pydot
               python -c "import theano; theano.test()";;
-        * ) print_message "yes master!"
+        * ) print_message "Installing pckgs required to run tests later."
+            conda install nose
+            pip install nose-parameterized
+            sudo apt-get install -y -f graphviz
+            conda install graphviz
+            conda install pydot
     esac
 
     read -p "Do you wanna install Torch7 separetely or as part of anaconda ? [y/N] " yn
     case $yn in
-        Y|y ) git clone https://github.com/torch/distro.git ~/torch --recursive;
-              cd ~/torch; bash install-deps; ./install.sh;
+        Y|y ) git clone https://github.com/torch/distro.git ~/torch --recursive
+              cd ~/torch; bash install-deps; ./install.sh
               read -p "would you like to run the tests for Torch7 now ? [y/n] " yn
               case $yn in
                   Y|y ) cd ${HOME}/torch; bash ./test.sh;;
                   * ) print_message "yes master!"
               esac;;
-        * ) conda install lua=5.2 lua-science -c alexbw
+        * ) print_message "Installing Torch7 as part of conda."
+            conda install lua=5.2 lua-science -c alexbw
     esac
+}
+
+function cleanup
+{
+    print_message "Cleaning up!"
+    rm -rf /tmp/OpenBLAS;
 }
 
 install_prerequisites 2>logs.txt
 install_tigervnc 2>logs.txt
 install_openblas 2>logs.txt
 install_anaconda 2>logs.txt
+cleanup 2>logs.txt
