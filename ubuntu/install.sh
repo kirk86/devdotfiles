@@ -1,7 +1,7 @@
 function print_message
 {
     echo ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;"
-    echo ";;               $1                        ;;"
+    echo ";;        $1                               ;;"
     echo ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;"
 }
 
@@ -13,7 +13,7 @@ function install_prerequisites
     sudo apt-get dist-ugrade;
 
     # install prerequisites
-    sudo apt-get install -y software-properties-common \
+    sudo apt-get install -y -f software-properties-common \
          libgraphicsmagick1-dev libfftw3-dev sox libsox-dev \
          libsox-fmt-all
 
@@ -61,7 +61,7 @@ function install_tigervnc
     cd ..
 
     # create vncuser
-    echo "Adding user for tigervncserver with username tigervcnuser"
+    print_message "Adding user for tigervncserver with username tigervcnuser"
     sudo adduser tigervncuser;
     # passwd tigervncuser
 
@@ -71,14 +71,14 @@ function install_tigervnc
         * ) echo "Yes master!"
     esac
 
-    echo "Switching to vncserver user in order to add vncserver password!"
+    print_message "Switching to vncserver user in order to add vncserver password!"
     sudo runuser -l tigervncuser -c tigervncpasswd;
     # sudo -H -u tigervncuser bash -c tigervncpasswd
 
     # run vncserver once to create config files and kill
-    echo "Running tigervncserver in order to create config files."
+    print_message "Running tigervncserver in order to create config files."
     tigervncserver;
-    echo "Killing tigervncserver."
+    print_message "Killing tigervncserver."
     tigervncserver -kill :1;
 
     cp ${HOME}/.vnc/xstartup ${HOME}/.vnc/xstartup-old;
@@ -125,17 +125,17 @@ function install_openblas
     fi
     RET=$?;
     if [ $RET -ne 0 ]; then
-        echo "Error. OpenBLAS could not be compiled";
+        print_message "Error. OpenBLAS could not be compiled"
         exit $RET;
     fi
     sudo make install;
     RET=$?;
     if [ $RET -ne 0 ]; then
-        echo "Error. OpenBLAS could not be installed";
+        print_message "Error. OpenBLAS could not be installed"
         exit $RET;
     fi
 
-    echo "Cleaning up!";
+    print_message "Cleaning up!"
     rm -rf /tmp/OpenBLAS;
 }
 
@@ -152,7 +152,7 @@ function install_anaconda
               read -p "Do you wanna install Theano ? [y/N] " yn
               case $yn in
                   Y|y ) pip install Theano;;
-                  * ) echo "Yes master!"
+                  * ) print_message "Yes master!"
               esac;;
         * ) wget https://repo.continuum.io/archive/Anaconda2-4.2.0-Linux-x86_64.sh
             bash Anaconda2-4.2.0-Linux-x86_64.sh;
@@ -160,7 +160,7 @@ function install_anaconda
             read -p "Do you wanna install Theano ? [y/N] " yn
             case $yn in
                 Y|y ) conda install Theano;;
-                * ) echo "Yes master!"
+                * ) print_message "Yes master!"
             esac
     esac
 
@@ -177,7 +177,7 @@ function install_anaconda
               conda install graphviz;
               conda install pydot;
               python -c "import theano; theano.test()";;
-        * ) echo "yes master!"
+        * ) print_message "yes master!"
     esac
 
     read -p "Do you wanna install Torch7 separetely or as part of anaconda ? [y/N] " yn
@@ -187,7 +187,7 @@ function install_anaconda
               read -p "would you like to run the tests for Torch7 now ? [y/n] " yn
               case $yn in
                   Y|y ) cd ${HOME}/torch; bash ./test.sh;;
-                  * ) echo "yes master!"
+                  * ) print_message "yes master!"
               esac;;
         * ) conda install lua=5.2 lua-science -c alexbw
     esac
