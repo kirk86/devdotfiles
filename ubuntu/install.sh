@@ -138,20 +138,25 @@ function install_anaconda
     read -p "Do you wanna install miniconda or anaconda ? [y/N] " yn
     case $yn in
         Y|y ) wget https://repo.continuum.io/miniconda/Miniconda2-4.1.11-Linux-x86_64.sh;
-              bash Miniconda2-4.1.11-Linux-x86_64.sh;;
+              bash Miniconda2-4.1.11-Linux-x86_64.sh;
+              read -p "Do you wanna install Theano ? [y/N]" yn;
+              case $yn in
+                  Y|y ) pip install Theano;;
+                  * ) echo "Yes master!"
+              esac;;
         * ) wget https://repo.continuum.io/archive/Anaconda2-4.2.0-Linux-x86_64.sh;
-            bash Anaconda2-4.2.0-Linux-x86_64.sh
+            bash Anaconda2-4.2.0-Linux-x86_64.sh;
+            read -p "Do you wanna install Theano ? [y/N]" yn;
+            case $yn in
+                Y|y ) conda install Theano;;
+                * ) echo "Yes master!"
+            esac
     esac
 
     # Add anaconda to your $PATH
     # echo "Adding anaconda to your path!"
     # echo export PATH=$HOME/anaconda/bin:$PATH >> ${HOME}/.bashrc
 
-    read -p "Do you wanna install Theano ? [y/N]" yn
-    case $yn in
-        Y|y ) conda install Theano;;
-        * ) echo "Yes master!"
-    esac
 
     read -p "Would you like to run the tests for Theano now ? [y/n] " yn
     case $yn in
@@ -162,13 +167,12 @@ function install_anaconda
     read -p "Do you wanna install Torch7 separetely or as part of anaconda ? [y/N]" yn
     case $yn in
         Y|y ) git clone https://github.com/torch/distro.git ~/torch --recursive;
-              cd ~/torch; bash install-deps; ./install.sh;;
+              cd ~/torch; bash install-deps; ./install.sh;
+              read -p "would you like to run the tests for Torch7 now ? [y/n] " yn
+              case $yn in
+                  Y|y ) cd ${HOME}/torch; bash ./test.sh;;
+                  * ) echo "yes master!"
+              esac;;
         * ) conda install lua=5.2 lua-science -c alexbw
-    esac
-
-    read -p "would you like to run the tests for Torch7 now ? [y/n] " yn
-    case $yn in
-        y|y ) cd ${HOME}/torch; bash ./test.sh;;
-        * ) echo "yes master!"
     esac
 }
