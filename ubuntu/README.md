@@ -23,5 +23,7 @@
   and password of the user. Here's the command to perform the
   tunneling in our client machine.
 
-  ```shell ssh -L 5901:127.0.0.1:5901 -N -f -l vncuser
-  128.199.234.106 ```
+  ```shell
+  ssh -L 5901:127.0.0.1:5901 -N -f -l vncuser
+  128.199.234.106
+  ```
