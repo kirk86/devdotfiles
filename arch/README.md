@@ -3,7 +3,7 @@
 
 1. installs prerequisite packages
 2. installs lxde-core as minimal gui
-3. installs tigervncserver for rpd
+3. installs tigervncserver for rdp
 4. installs openblas
 5. installs theano and torch depending your choice
 
