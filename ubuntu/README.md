@@ -1,4 +1,4 @@
-# Quick ubuntu dev environment setup
+# Quick linux dev environment setup
 *Notice*: Unfortunately requires root privilege access. I'm afraid no easy way around that!
 
 1. installs prerequisite packages
@@ -14,3 +14,14 @@
 
 *Tested:*
 - Tested on Ubuntu 16.04 codename xenial.
+
+*Notice:*
+
+- It's always as good idea to tunnel your connection to your vnc.  VNC
+  connections are considered as insecure connection as they are not
+  encrypted. To perform the tunnel, we'll need the login user, port
+  and password of the user. Here's the command to perform the
+  tunneling in our client machine.
+
+  ```shell ssh -L 5901:127.0.0.1:5901 -N -f -l vncuser
+  128.199.234.106 ```

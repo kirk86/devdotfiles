@@ -154,7 +154,7 @@ function install_anaconda
                   Y|y ) pip install Theano;;
                   * ) print_message "Yes master!"
               esac;;
-        * ) wget https://repo.continuum.io/archive/Anaconda2-4.2.0-Linux-x86_64.sh
+        * ) wget https://repo.continuum.io/archives/Anaconda2-4.2.0-Linux-x86_64.sh
             bash Anaconda2-4.2.0-Linux-x86_64.sh
             source ${HOME}/.bashrc
             read -p "Do you wanna install Theano ? [y/N] " yn
@@ -167,7 +167,6 @@ function install_anaconda
     # Add anaconda to your $PATH
     # echo "Adding anaconda to your path!"
     # echo export PATH=$HOME/anaconda/bin:$PATH >> ${HOME}/.bashrc
-
 
     read -p "Would you like to run the tests for Theano now ? [y/n] " yn
     case $yn in
