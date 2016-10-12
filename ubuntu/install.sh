@@ -11,7 +11,7 @@ function print_message
 function install_prerequisites
 {
     # update packages
-    sudo aptg-get update; sudo apt-get upgrade; sudo apt-get dist-ugrade
+    sudo apt-get update; sudo apt-get upgrade; sudo apt-get dist-upgrade
 
     # install prerequisites
     sudo apt-get install -y software-properties-common \

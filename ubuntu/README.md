@@ -9,5 +9,8 @@
 
 *Todo:*
 
-1. port it for arch linux
+1. port it for arch linux (not tested yet)
 2. port it for OS X
+
+*Tested:*
+- Tested on Ubuntu 16.04 codename xenial.
