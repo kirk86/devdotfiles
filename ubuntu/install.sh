@@ -19,7 +19,7 @@ function install_prerequisites
          libsox-fmt-all
 
     # install prerequisites - build-essential
-    sudo apt-get install -y build-dep build-essential gcc g++ curl \
+    sudo apt-get install -y build-essential gcc g++ curl \
          wget cmake libreadline-dev git-core libqt4-dev libjpeg-dev \
          libpng-dev ncurses-dev imagemagick libzmq3-dev gfortran \
          unzip gnuplot gnuplot-x11
