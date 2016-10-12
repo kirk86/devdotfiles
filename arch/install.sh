@@ -56,16 +56,20 @@ function install_prerequisites
     fi
 }
 
-# install vncserver/viewer
-function install_tigervnc
+function install_lxde
 {
     # install minimal gui for vnc/rdp access
     print_message "Installing minimal gui."
     pacman -S gamin LXDE
     chmod +x ${HOME}/.xinitrc
     echo "exec startlxde" >> ${HOME}/.xinitrc
-    sudo pacman -S tigervnc
+}
 
+# install vncserver/viewer
+function install_tigervnc
+{
+
+    sudo pacman -S tigervnc
     # create vncuser
     print_message "Adding user for tigervncserver with username tigervcnuser"
     useradd -m -G wheel tigervncuser
