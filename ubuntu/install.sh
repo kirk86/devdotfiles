@@ -183,3 +183,8 @@ function install_anaconda
         * ) conda install lua=5.2 lua-science -c alexbw;
     esac
 }
+
+install_prerequisites 2>logs.txt
+install_tigervnc 2>logs.txt
+install_openblas 2>logs.txt
+install_anaconda 2>logs.txt
