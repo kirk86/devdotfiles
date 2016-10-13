@@ -143,7 +143,7 @@ function install_openblas
         print_message "Error. OpenBLAS could not be installed"
         exit $RET;
     fi
-}e
+}
 
 function install_anaconda
 {
