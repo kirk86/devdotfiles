@@ -215,9 +215,9 @@ function cleanup
     sudo apt-get autoremove
 }
 
-install_prerequisites 2>logs.txt
-# install_tigervnc 2>logs.txt
-# config_tigervnc 2>logs.txt
-# install_openblas 2>logs.txt
-# install_anaconda 2>logs.txt
-# cleanup 2>logs.txt
+install_prerequisites
+install_tigervnc
+config_tigervnc
+install_openblas
+install_anaconda
+cleanup
