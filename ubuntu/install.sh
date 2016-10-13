@@ -216,6 +216,7 @@ function cleanup
 }
 
 install_prerequisites
+install_lxde
 install_tigervnc
 config_tigervnc
 install_openblas
