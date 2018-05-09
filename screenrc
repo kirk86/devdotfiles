@@ -1,0 +1,83 @@
+# Don't display the copyright page
+startup_message off
+
+# tab-completion flash in heading bar
+vbell off # turn virtual bell off
+
+# enable the altscreen
+# for example in vim, it allows to scroll with the mouse without
+# "overflowing" on the terminal
+# also it doesn't "pollute" the terminal when you quit vim
+altscreen on
+
+# automatically detach the session if the terminal is closed
+autodetach on
+
+# larger command history
+defscrollback 10000 # max num of allowed characters to scroll back
+
+# set the encoding of the windows to utf-8
+defutf8 on
+
+# set screen colors
+term xterm-256color
+
+# allow to scroll
+#termcapinfo xterm ti@:te@
+#termcapinfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'   # tell screen how to set colors. AB = background, AF=foreground
+termcapinfo xterm* 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm:ti@:te@'
+defbce on    # use current bg color for erased chars. Erase background with current bg color
+
+# Enable mouse scrolling and scroll bar history scrolling
+termcapinfo xterm* ti@:te@
+
+# mouse tracking allows to switch region focus by clicking
+mousetrack on
+6
+# if you want your ~/.bash_profile executed when you use the shell through screen
+#shell -$SHELL
+defshell -bash
+
+# binding keys for navigation between panes
+bind j focus down
+bind k focus up
+bind l focus right
+bind h focus left
+
+# bindkey -k k2 next
+# bindkey -k k1 prev
+
+# for shift UP and DOWN arrows
+# bindkey ^[[1;5A prev
+# bindkey ^[[1;5B next
+#
+# # for ctrl right and left arrows
+# bind ^[[1;5D focus right
+# bind ^[[1;5C focus left
+
+# With these you go prev next with shift-left and shift+right:
+# bindkey ^[[1;2D prev # change window with shift-left
+# bindkey ^[[1;2C next # change window with shift-right
+
+# binding Ctrl + a key to Ctr + spacebar since Ctrl + a isn't working from
+# inside muti-term in emacs
+escape ^@@
+
+# do not trash BackSpace, usually DEL
+bindkey -k kb
+bindkey -d -k kb
+
+# do not trash Delete, usually ESC [ 3 ~
+bindkey -k kD
+bindkey -d -k kD
+
+# This line makes Detach and Re-attach without losing the regions/windows layout
+layout save default
+
+# set up bottom message bar
+hardstatus on
+hardstatus alwayslastline
+hardstatus string '%{= kg}[ %{g} '${USER}'@%H ][%= %{= kw}%?%-Lw%?%{+b r}(%{y}Session: %{w}%S, %{y}Win#: %{w}%n*, %{y}Flags: %{w}%f, %{y}WinTitle: %{w}%t%?(%u)%?%{+b r})%{w}%?%+Lw%?%?%= %{g}][%l][%{b}%D-%M%d-%Y %c%A%{g}]'
+#hardstatus string "%{g}[ ${USER}@%H ][%?%-Lw%?(Session: %S, Win#: %n*, Flags: %f, WinTitle: %t%?(%u)%?%)%?%+Lw%?%?]%{g}[%l]%{b}[%D-%M%d-%Y%c%A%]"
+#hardstatus alwayslastline '%{gk}[ %{G}%H %{g}][%= %{wk}%?%-Lw%?%{=b kR}(%{W}%n*%f %t%?(%u)%?%{=b kR})%{= kw}%?%+Lw%?%?%= %{g}][%{Y}%l%{g}]%{=b C}[ %d/%m %c ]%{W}'
+#hardstatus string '%{= kg}[ %{G} '${USER}'@%H %{g}][%= %{= kw}%?%-Lw%?%{+b r}(%{W}Session:%S, %n*%f %t%?(%u)%?%{+b r})%{w}%?%+Lw%?%?%= %{g}][%{B} %Y-%m-%d %{W}%c %{g}]'
