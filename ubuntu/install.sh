@@ -152,16 +152,16 @@ function install_anaconda
 
     read -p "Do you wanna install miniconda or anaconda ? [y/N] " yn
     case $yn in
-        Y|y ) wget https://repo.continuum.io/miniconda/Miniconda2-4.1.11-Linux-x86_64.sh
-              bash Miniconda2-4.1.11-Linux-x86_64.sh
+        Y|y ) wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+              bash Miniconda3-latest-Linux-x86_64.sh
               source ${HOME}/.bashrc
               read -p "Do you wanna install Theano ? [y/N] " yn
               case $yn in
                   Y|y ) pip install Theano;;
                   * ) print_message "Yes master!"
               esac;;
-        * ) wget https://repo.continuum.io/archive/Anaconda2-4.2.0-Linux-x86_64.sh
-            bash Anaconda2-4.2.0-Linux-x86_64.sh
+        * ) wget https://repo.anaconda.com/archive/Anaconda3-5.3.0-Linux-x86_64.sh
+            bash Anaconda3-5.3.0-Linux-x86_64.sh
             source ${HOME}/.bashrc
             read -p "Do you wanna install Theano ? [y/N] " yn
             case $yn in
