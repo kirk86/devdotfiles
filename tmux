@@ -1,4 +1,4 @@
-set-environment -g SGE_ROOT "/idiap/resource/software/sge/8.1.9.si/bin/lx-amd64"
+set-environment -g SGE_ROOT "/resource/software/sge/8.1.9.si/bin/lx-amd64"
 set -g default-terminal "screen-256color"
 set-option -g update-environment "DISPLAY XAUTHORITY"
 set-option -g history-limit 1000000
